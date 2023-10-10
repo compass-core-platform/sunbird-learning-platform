@@ -137,6 +137,9 @@ post-publish-processor:
     lms-cassandra {
       keyspace = "{{ middleware_course_keyspace }}"
       batchTable = "course_batch"
+      sbKeyspace = "sunbird"
+      certTemplateId = "compassDefaultTemplateTwo"
+      systemSettingsTable= "system_settings"
     }
     dialcode-cassandra {
       keyspace = "dialcodes"
@@ -1248,6 +1251,3 @@ cassandra-data-migration:
     jobmanager.execution.failover-strategy: region
     taskmanager.memory.network.fraction: 0.1
 
-lms-cassandra.sbKeyspace=sunbird
-lms-cassandra.certTemplateId=compassDefaultTemplateTwo
-lms-cassandra.systemSettingsTable=system_settings
