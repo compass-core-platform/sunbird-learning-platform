@@ -42,6 +42,8 @@ public class HierarchyStore extends CassandraStore {
         try {
             String query = "UPDATE " + getKeyspace() + "." + getTable() + " SET hierarchy = ? WHERE identifier = ?";
             String hierarchyData = mapper.writeValueAsString(hierarchy);
+            TelemetryManager.info("hierarchyData   ::: "+hierarchyData);
+            TelemetryManager.info("saveOrUpdateHierarchy  getTable ::: "+getTable());
             Session session = CassandraConnector.getSession();
             PreparedStatement statement = session.prepare(query);
             BoundStatement boundStatement = new BoundStatement(statement);

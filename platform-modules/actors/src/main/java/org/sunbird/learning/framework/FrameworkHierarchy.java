@@ -138,6 +138,7 @@ public class FrameworkHierarchy extends BaseManager {
 								sortKeys.add(title);
 						}
 						Map<String, Object> relMeta = relation.getMetadata();
+						TelemetryManager.info("outReleation relMeta   ::: "+relMeta);
 						int seqIndex = 0;
 						if (relMeta != null) {
 							Object indexObj = relMeta.get("IL_SEQUENCE_INDEX");
@@ -160,7 +161,7 @@ public class FrameworkHierarchy extends BaseManager {
 				}
 			}
 		}
-
+		TelemetryManager.info("functions getHierarchy data   ::: "+data);
 		return data;
 	}
 
