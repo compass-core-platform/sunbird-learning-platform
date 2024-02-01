@@ -3,8 +3,10 @@
  */
 package org.sunbird.learning.framework;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.sunbird.cassandra.store.Constants;
 import org.sunbird.common.Platform;
 import org.sunbird.common.dto.Request;
 import org.sunbird.common.dto.Response;
@@ -48,6 +50,8 @@ public class FrameworkHierarchy extends BaseManager {
 	private static final String objectType = "Framework";
 	private HierarchyStore hierarchyStore = new HierarchyStore(keyspace, table, objectType, false);
 
+	private String MorePropertiesCheck = "\"moreProperties\": { \"competencyArea\": \"Functional\", \"competencyType\": \"Visual Design\" }";
+	private ObjectMapper mapper = new ObjectMapper();
 	/**
 	 * @param id
 	 * @throws Exception
@@ -153,6 +157,17 @@ public class FrameworkHierarchy extends BaseManager {
 							getChildren = false;
 						}
 						Map<String, Object> childData = getHierarchy(relation.getEndNodeId(), seqIndex, true, getChildren);
+						if (StringUtils.isNotEmpty(MorePropertiesCheck)) {
+							TelemetryManager.info("inside MorePropertiesCheck");
+							Map<String, Object> moreProperties = new HashMap<>();
+							Map<String, Object> morePropertiesMap = mapper.readValue(MorePropertiesCheck, Map.class);
+							String competencyArea = (String) morePropertiesMap.getOrDefault("competencyArea","");
+							String competencyType = (String) morePropertiesMap.getOrDefault("competencyType","");
+							moreProperties.put("competencyArea", competencyArea);
+							moreProperties.put("competencyType", competencyType);
+							childData.put("moreProperties", moreProperties);
+							TelemetryManager.info("after getting MoreProperties ::"+moreProperties);
+						}
 						if (!childData.isEmpty())
 							relData.add(childData);
 					}
