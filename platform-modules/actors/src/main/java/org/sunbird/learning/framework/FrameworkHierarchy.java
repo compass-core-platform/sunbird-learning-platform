@@ -25,12 +25,7 @@ import org.sunbird.graph.model.node.DefinitionDTO;
 import org.sunbird.learning.hierarchy.store.HierarchyStore;
 import org.sunbird.telemetry.logger.TelemetryManager;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author pradyumna
@@ -114,12 +109,6 @@ public class FrameworkHierarchy extends BaseManager {
 				String[] fields = getFields(definition);
 				if (fields != null) {
 					for (String field : fields) {
-						if (field.equalsIgnoreCase("moreProperties")) {
-							TelemetryManager.info("definition field moreProperties::: "+field +"  $$$ "+metadata.get(field));
-							Map<String, Object> morePropertiesMap = mapper.readValue((String) metadata.get(field), Map.class);
-							TelemetryManager.info("definition field morePropertiesMap::: "+morePropertiesMap);
-							data.put(field,morePropertiesMap);
-						}
 						data.put(field, metadata.get(field));
 						TelemetryManager.info("definition field ::: "+field +","+metadata.get(field));
 					}
@@ -130,7 +119,15 @@ public class FrameworkHierarchy extends BaseManager {
 				data.put("identifier", node.getIdentifier());
 				data.put("index", index);
 				if (objectType.equalsIgnoreCase("term")) {
-					TelemetryManager.info("definition field  new condition ::: "+fields +","+node.getMetadata());
+					TelemetryManager.info("definition field  term check::: "+ Arrays.toString(fields) +","+node.getMetadata());
+					Map<String, Object> nodeMetadata = node.getMetadata();
+					if (nodeMetadata.containsKey("moreProperties")) {
+						String morePropertiesJson = (String) metadata.get("moreProperties");
+						Map<String, Object> morePropertiesMap = mapper.readValue(morePropertiesJson, Map.class);
+						TelemetryManager.info("moreProperties map :: "+morePropertiesMap);
+						data.put("moreProperties",morePropertiesMap);
+						TelemetryManager.info("after adding moreProperties to map::: "+data);
+					}
 				}
 			}
 			if (includeRelations) {
@@ -166,20 +163,6 @@ public class FrameworkHierarchy extends BaseManager {
 						}
 						Map<String, Object> childData = getHierarchy(relation.getEndNodeId(), seqIndex, true, getChildren);
 						TelemetryManager.info("before checking more properties");
-						if (StringUtils.isNotEmpty(MorePropertiesCheck)) {
-							TelemetryManager.info("inside MorePropertiesCheck :::" +relation);
-
-//							Map<String, Object> moreProperties = new HashMap<>();
-//							Map<String, Object> morePropertiesMap = mapper.readValue(MorePropertiesCheck, Map.class);
-//							String termMoreProperties = (String) relMeta.getOrDefault("moreProperties","");
-//							TelemetryManager.info("inside termMoreProperties" +termMoreProperties);
-//							String competencyArea = (String) relMeta.getOrDefault("competencyArea","");
-//							String competencyType = (String) relMeta.getOrDefault("competencyType","");
-//							moreProperties.put("competencyArea", competencyArea);
-//							moreProperties.put("competencyType", competencyType);
-//							childData.put("moreProperties", moreProperties);
-//							TelemetryManager.info("after getting MoreProperties ::"+moreProperties);
-						}
 						if (!childData.isEmpty())
 							relData.add(childData);
 					}
