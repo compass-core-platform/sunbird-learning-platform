@@ -157,6 +157,7 @@ public class FrameworkHierarchy extends BaseManager {
 							getChildren = false;
 						}
 						Map<String, Object> childData = getHierarchy(relation.getEndNodeId(), seqIndex, true, getChildren);
+						TelemetryManager.info("before checking more properties");
 						if (StringUtils.isNotEmpty(MorePropertiesCheck)) {
 							TelemetryManager.info("inside MorePropertiesCheck");
 							Map<String, Object> moreProperties = new HashMap<>();
