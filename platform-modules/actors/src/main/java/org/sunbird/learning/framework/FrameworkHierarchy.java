@@ -108,11 +108,13 @@ public class FrameworkHierarchy extends BaseManager {
 			DefinitionDTO definition = getDefinition(GRAPH_ID, objectType);
 			if (includeMetadata) {
 				String[] fields = getFields(definition);
+				TelemetryManager.info("definition fields ::: "+fields);
 				if (fields != null) {
 					for (String field : fields) {
 						data.put(field, metadata.get(field));
 					}
 				} else {
+					TelemetryManager.info("definition fields empty::: "+node.getMetadata());
 					data.putAll(node.getMetadata());
 				}
 				data.put("identifier", node.getIdentifier());
