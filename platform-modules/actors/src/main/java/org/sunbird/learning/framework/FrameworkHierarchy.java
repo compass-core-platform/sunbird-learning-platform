@@ -112,10 +112,10 @@ public class FrameworkHierarchy extends BaseManager {
 			DefinitionDTO definition = getDefinition(GRAPH_ID, objectType);
 			if (includeMetadata) {
 				String[] fields = getFields(definition);
-				TelemetryManager.info("definition fields ::: "+fields);
 				if (fields != null) {
 					for (String field : fields) {
 						data.put(field, metadata.get(field));
+						TelemetryManager.info("definition field ::: "+fields +","+metadata.get(field));
 					}
 				} else {
 					TelemetryManager.info("definition fields empty::: "+node.getMetadata());
@@ -123,7 +123,9 @@ public class FrameworkHierarchy extends BaseManager {
 				}
 				data.put("identifier", node.getIdentifier());
 				data.put("index", index);
-
+				if (objectType.equalsIgnoreCase("term")) {
+					TelemetryManager.info("definition field ::: "+fields +","+node.getMetadata());
+				}
 			}
 			if (includeRelations) {
 				Map<String, String> inRelDefMap = new HashMap<>();
@@ -159,17 +161,18 @@ public class FrameworkHierarchy extends BaseManager {
 						Map<String, Object> childData = getHierarchy(relation.getEndNodeId(), seqIndex, true, getChildren);
 						TelemetryManager.info("before checking more properties");
 						if (StringUtils.isNotEmpty(MorePropertiesCheck)) {
-							TelemetryManager.info("inside MorePropertiesCheck");
-							Map<String, Object> moreProperties = new HashMap<>();
-							Map<String, Object> morePropertiesMap = mapper.readValue(MorePropertiesCheck, Map.class);
-							String termMoreProperties = (String) relMeta.getOrDefault("moreProperties","");
-							TelemetryManager.info("inside termMoreProperties" +termMoreProperties);
-							String competencyArea = (String) relMeta.getOrDefault("competencyArea","");
-							String competencyType = (String) relMeta.getOrDefault("competencyType","");
-							moreProperties.put("competencyArea", competencyArea);
-							moreProperties.put("competencyType", competencyType);
-							childData.put("moreProperties", moreProperties);
-							TelemetryManager.info("after getting MoreProperties ::"+moreProperties);
+							TelemetryManager.info("inside MorePropertiesCheck :::" +relation);
+
+//							Map<String, Object> moreProperties = new HashMap<>();
+//							Map<String, Object> morePropertiesMap = mapper.readValue(MorePropertiesCheck, Map.class);
+//							String termMoreProperties = (String) relMeta.getOrDefault("moreProperties","");
+//							TelemetryManager.info("inside termMoreProperties" +termMoreProperties);
+//							String competencyArea = (String) relMeta.getOrDefault("competencyArea","");
+//							String competencyType = (String) relMeta.getOrDefault("competencyType","");
+//							moreProperties.put("competencyArea", competencyArea);
+//							moreProperties.put("competencyType", competencyType);
+//							childData.put("moreProperties", moreProperties);
+//							TelemetryManager.info("after getting MoreProperties ::"+moreProperties);
 						}
 						if (!childData.isEmpty())
 							relData.add(childData);
