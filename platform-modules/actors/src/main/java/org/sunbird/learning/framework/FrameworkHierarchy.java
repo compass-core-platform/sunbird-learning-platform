@@ -51,8 +51,6 @@ public class FrameworkHierarchy extends BaseManager {
 	private HierarchyStore hierarchyStore = new HierarchyStore(keyspace, table, objectType, false);
 
 	private String MorePropertiesCheck = "\"moreProperties\": { \"competencyArea\": \"Functional\", \"competencyType\": \"Visual Design\" }";
-//	additional.relation.properties="[{\"propertyName\": \"approvalStatus\", \"title\": \"ApprovalStatus\", \"description\": \"Approval Status of the Relation\", \"dataType\": \"Text\", \"required\": true, \"defaultValue\": \"Draft\"}]"
-
 	private ObjectMapper mapper = new ObjectMapper();
 	/**
 	 * @param id
