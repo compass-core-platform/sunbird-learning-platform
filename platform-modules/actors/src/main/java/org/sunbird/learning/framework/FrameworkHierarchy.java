@@ -114,8 +114,14 @@ public class FrameworkHierarchy extends BaseManager {
 				String[] fields = getFields(definition);
 				if (fields != null) {
 					for (String field : fields) {
+						if (field.equalsIgnoreCase("moreProperties")) {
+							TelemetryManager.info("definition field moreProperties::: "+field +"  $$$ "+metadata.get(field));
+							Map<String, Object> morePropertiesMap = mapper.readValue((String) metadata.get(field), Map.class);
+							TelemetryManager.info("definition field morePropertiesMap::: "+morePropertiesMap);
+							data.put(field,morePropertiesMap);
+						}
 						data.put(field, metadata.get(field));
-						TelemetryManager.info("definition field ::: "+fields +","+metadata.get(field));
+						TelemetryManager.info("definition field ::: "+field +","+metadata.get(field));
 					}
 				} else {
 					TelemetryManager.info("definition fields empty::: "+node.getMetadata());
@@ -124,7 +130,7 @@ public class FrameworkHierarchy extends BaseManager {
 				data.put("identifier", node.getIdentifier());
 				data.put("index", index);
 				if (objectType.equalsIgnoreCase("term")) {
-					TelemetryManager.info("definition field ::: "+fields +","+node.getMetadata());
+					TelemetryManager.info("definition field  new condition ::: "+fields +","+node.getMetadata());
 				}
 			}
 			if (includeRelations) {
