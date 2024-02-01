@@ -51,6 +51,8 @@ public class FrameworkHierarchy extends BaseManager {
 	private HierarchyStore hierarchyStore = new HierarchyStore(keyspace, table, objectType, false);
 
 	private String MorePropertiesCheck = "\"moreProperties\": { \"competencyArea\": \"Functional\", \"competencyType\": \"Visual Design\" }";
+//	additional.relation.properties="[{\"propertyName\": \"approvalStatus\", \"title\": \"ApprovalStatus\", \"description\": \"Approval Status of the Relation\", \"dataType\": \"Text\", \"required\": true, \"defaultValue\": \"Draft\"}]"
+
 	private ObjectMapper mapper = new ObjectMapper();
 	/**
 	 * @param id
@@ -162,8 +164,10 @@ public class FrameworkHierarchy extends BaseManager {
 							TelemetryManager.info("inside MorePropertiesCheck");
 							Map<String, Object> moreProperties = new HashMap<>();
 							Map<String, Object> morePropertiesMap = mapper.readValue(MorePropertiesCheck, Map.class);
-							String competencyArea = (String) morePropertiesMap.getOrDefault("competencyArea","");
-							String competencyType = (String) morePropertiesMap.getOrDefault("competencyType","");
+							String termMoreProperties = (String) relMeta.getOrDefault("moreProperties","");
+							TelemetryManager.info("inside termMoreProperties" +termMoreProperties);
+							String competencyArea = (String) relMeta.getOrDefault("competencyArea","");
+							String competencyType = (String) relMeta.getOrDefault("competencyType","");
 							moreProperties.put("competencyArea", competencyArea);
 							moreProperties.put("competencyType", competencyType);
 							childData.put("moreProperties", moreProperties);
